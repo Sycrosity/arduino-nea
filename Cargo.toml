@@ -1,0 +1,42 @@
+[package]
+name = "arduino-nea"
+version = "0.1.0"
+authors = ["Sycrosity <72102935+Sycrosity@users.noreply.github.com>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[[bin]]
+name = "arduino-nea"
+test = false
+bench = false
+
+[dependencies]
+panic-halt = "0.2"
+ufmt = "0.2"
+#as this is built twice with v0.2, this may speed up compilation
+# ufmt = "0.1.2"
+nb = "1.0"
+pwm-pca9685 = "0.3"
+embedded-hal = "0.2"
+#for map range
+num-traits = {version = "0.2", default-features = false}
+avr-device = "0.5"
+
+
+[dependencies.arduino-hal]
+git = "https://github.com/rahix/avr-hal"
+branch = "main"
+features = ["arduino-uno"]
+
+# Configure the build for minimal size - AVRs have very little program memory
+[profile.dev]
+panic = "abort"
+lto = true
+opt-level = "s"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+debug = true
+lto = true
+opt-level = "s"
